@@ -1,0 +1,39 @@
+<application
+	name="DBN (Deep Belief Networks)"
+	acronym="DBN"
+	summary="[p]The DBN trains [b]Restricted Boltzmann Machines (RBMs)[/b] and [b]Deep Belief Networks (DBNs)[/b], using the [b]Contrastive Divergence (CD)[/b] algorithm.[/p][p][b]Warning[/b]: This version performs only greedy-layer wise pre-training.[/p]"
+	cite="If you make use of DBN in your work, please cite one or more of the following publications, which describe work that has been integrated in the DBN application:[ul][li]Noel Lopes and Bernardete Ribeiro. [em]Machine Learning for Adaptive Many-Core Machines – A Practical Approach[/em], volume 7 of [em]Studies in Big Data[/em]. Springer, 2014.[/li][li]Noel Lopes and Bernardete Ribeiro. Towards adaptive learning with improved convergence of deep belief networks on graphics processing units. [em]Pattern Recognition[/em], 47(1):114–127, 2014.[/li][li]Noel Lopes, Bernardete Ribeiro, and João Gonçalves. Restricted Boltzmann machines and deep belief networks on multi-core processors. In [em]The 2012 International Joint Conference on Neural Networks (IJCNN)[/em], 2012.[/li][li]Noel Lopes and Bernardete Ribeiro. Improving convergence of restricted Boltzmann machines via a learning adaptive step size. In [em]Progress in Pattern Recognition, Image Analysis, Computer Vision, and Applications, LNCS 7441[/em], pages 511–518. Springer Berlin / Heidelberg, 2012.[/li][/ul]"
+>
+	 <parameter name="Device" type="device" commandline="device" summary="Device (CPU or GPU) to be used to train the network." />
+	 <group name="Datasets">
+		  <parameter name="Header line" type="bool" summary="If true the first line of the datasets (containing the caption) will be ignored" commandline="header" value="false" />
+		  <parameter name="Rescale input data" type="bool" summary="If true the input data will be rescaled between 0 and 1" commandline="rescale" value="true" />
+		  <group name="Training">
+				<parameter name="Filename" type="filename" summary="Training filename" commandline="trainfile" filter="Dataset (*.csv *.txt);;All files (*.*)" />
+				<parameter name="Samples" type="int" summary="Number of training samples to be processed. A value of 0 (zero) means all." commandline="trainsamples" minimum="0" value="0" />
+		  </group>
+		  <group name="Validation" optional="true">
+				<parameter name="Filename" type="filename" summary="Validation filename" commandline="validationfile" filter="Dataset (*.csv *.txt);;All files (*.*)" />
+				<parameter name="Samples" type="int" summary="Number of validation samples to be used. A value of 0 (zero) means all." commandline="validationsamples" minimum="0" value="0" />
+		  </group>
+	 </group>
+	 <group name="Networks configuration">
+		  <parameter name="Topology" type="string" summary="Network topology layers (e.g. 10-30-10-1 represents a network with 10 inputs, 30 hidden neurons in the first hidden layer, 10 neurons in the second hidden layer and 1 output). Note that at least one input and one output layer must be specified." regexp="[1-9][0-9]*(\-[1-9][0-9]*)+" commandline="topology" />
+		  <parameter name="Classification" type="bool" summary="If true, the last layer will not be trained in the pre-training phase. Afterwards, the whole network (including the last classification layer) is supposed to be trained with the Back-Propagation algorithm ([b]NOTE: THIS IS STILL NOT IMPLEMENTED[/b])." commandline="classification" value="false" />
+	 </group>
+	 <group name="Training configuration">
+		 <group name="Algorithm">
+			  <parameter name="CD-k" type="int" summary="Use CD-k (Contrastive Divergence) algorithm (e.g. 1, means CD-1)" commandline="cd" minimum="1" value="1" />
+			  <parameter name="Mini-batch" type="int" summary="Training mini-batch size. If zero the whole dataset will be trained at once. WARNING: Currently this option does not work for the CPU." commandline="minibatch" minimum="0" value="0" />
+		 </group>
+		 <group name="Learning">
+			  <parameter name="Learning rate" type="float" summary="Initial learning rate" commandline="learning_rate" minimum="0.001" value="0.1" step="0.005" decimals="3" />
+			  <parameter name="Momentum" type="float" summary="Momentum" commandline="momentum" minimum="0" maximum="0.995" value="0.3" step="0.005" decimals="3"  />
+		 </group>
+		<group name="Stop criteria">
+			<parameter name="Epochs" type="int" summary="Maximum number of epochs to train the network" commandline="epochs" minimum="0" value="0" />
+			<parameter name="Stop error" type="float" summary="Stop training when the MSE (Mean Square error) of the network is less than or equal to ..." commandline="mse" minimum="0" maximum="1" value="0.01" step="0.005" decimals="3"  />
+		</group>
+		<parameter name="Initial random seed" type="int" commandline="random" value="0" summary="The initial random seed. If 0 (zero) a new random seed will be obtained." />
+	 </group>
+</application>

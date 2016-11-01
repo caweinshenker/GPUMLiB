@@ -1,0 +1,38 @@
+<application
+	name="ATS (Autonomous Training System)"
+	acronym="ATS"
+	cpu="false"
+	summary="The ATS aims at automatically find high-quality neural network models, by gradually adjusting the networks topology. Currently, the ATS supports the [b]Back-Propagation (BP)[/b] and the [b]Multiple Back-Propagation (MBP)[/b] algorithms. Moreover, this version is capable of handling missing values, without requiring data to be pre-processed, due to the use of the [b]Neural Selective Input Model (NSIM)[/b] algorithm.[/p][p][b]Warning[/b]: This version is designed for classification problems."
+	cite="If you make use of ATS in your work, please cite one or more of the following papers, which describe work that has been integrated in the ATS:[ul][li]Back-Propagation, Multiple Back-Propagation and Autonomous Training System (GPU implementation)[ul][li]Noel Lopes and Bernardete Ribeiro. [em]Machine Learning for Adaptive Many-Core Machines – A Practical Approach[/em], volume 7 of [em]Studies in Big Data[/em]. Springer, 2014.[/li][li]Noel Lopes and Bernardete Ribeiro. An evaluation of multiple feed-forward networks on GPUs. [em]International Journal of Neural Systems (IJNS)[/em], 21(1):31-47, 2011.[/li][/ul][/li][li]Back-Propagation and Multiple Back-Propagation GPU implementation[ul][li]Noel Lopes and Bernardete Ribeiro. [em]Machine Learning for Adaptive Many-Core Machines – A Practical Approach[/em], volume 7 of [em]Studies in Big Data[/em]. Springer, 2014.[/li][li]Noel Lopes and Bernardete Ribeiro. Stochastic GPU-based multithread implementation of multiple back-propagation. In [em]Second International Conference on Agents and Artificial Intelligence (ICAART 2010)[/em], pages 271-276, 2010.[/li][li]Noel Lopes and Bernardete Ribeiro. GPU implementation of the multiple back-propagation algorithm. In [em]10th International Conference on Intelligent Data Engineering and Automated Learning (IDEAL 2009), LNCS 5788[/em], pages 449-456. Springer, 2009.[/li][/ul][/li][li]Neural Selective Input Model (NSIM)[ul][li]Noel Lopes and Bernardete Ribeiro. [em]Machine Learning for Adaptive Many-Core Machines – A Practical Approach[/em], volume 7 of [em]Studies in Big Data[/em]. Springer, 2014.[/li][li]Noel Lopes and Bernardete Ribeiro. Handling missing values via a neural selective input model. [em]Neural Network World[/em], 22(4):357-370, 2012.[/li][li]Noel Lopes and Bernardete Ribeiro. A robust learning model for dealing with missing values in many-core architectures. In [em]10th International Conference on Adaptive and Natural Computing Algorithms (ICANNGA 2011), Part II, LNCS 6594[/em], pages 108-117. Springer Berlin Heidelberg, 2011.[/li][li]Noel Lopes and Bernardete Ribeiro. A strategy for dealing with missing values by using selective activation neurons in a multi-topology framework. In [em]IEEE World Congress on Computational Intelligence (WCCI 2010)[/em], 2010.[/li][/ul][/li][li]Multiple Back-Propagation Algorithm[ul][li]Noel Lopes and Bernardete Ribeiro. [em]Machine Learning for Adaptive Many-Core Machines – A Practical Approach[/em], volume 7 of [em]Studies in Big Data[/em]. Springer, 2014.[/li][li]Noel Lopes and Bernardete Ribeiro. An efficient gradient-based learning algorithm applied to neural networks with selective actuation neurons. [em]Neural, Parallel and Scientific Computations[/em], 11:253-272, 2003.[/li][li]Noel Lopes and Bernardete Ribeiro. Hybrid learning in a multi-neural network architecture. In [em]INNS-IEEE International Joint Conference on Neural Networks (IJCNN 2001)[/em], volume 4, pages 2788-2793, 2001.[/li][/ul][/li][li]GPUMLib[/li][ul][li]Noel Lopes and Bernardete Ribeiro. [em]Machine Learning for Adaptive Many-Core Machines – A Practical Approach[/em], volume 7 of [em]Studies in Big Data[/em]. Springer, 2014.[/li][li]Noel Lopes and Bernardete Ribeiro. GPUMLib: An efficient open-source GPU machine learning library. [em]International Journal of Computer Information Systems and Industrial Management Applications[/em]3:355-362, 2011.[/li][li]Noel Lopes, Bernardete Ribeiro and Ricardo Quintas. GPUMLib: A new library to combine machine learning algorithms with graphics processing units. In [em]IEEE 10th International Conference on Hybrid Intelligent Systems (HIS 2010)[/em], pages 229-232, August 2010.[/li][/ul][/ul]"
+>
+	<parameter name="Device" type="device" commandline="device" summary="Device (CPU or GPU) to be used to train the network. [u]WARNING[/u]: Currently the CPU is not supported." />
+	<group name="Datasets">
+		<parameter name="Header line" type="bool" summary="If true the first line of the datasets (containing the caption) will be ignored" commandline="header" value="false" />
+		<parameter name="Rescale input data" type="bool" summary="If true the input data will be rescaled between -1 and 1" commandline="rescale" value="true" />
+		<group name="Training">
+			<parameter name="Filename" type="filename" summary="Training filename" commandline="trainfile" filter="Dataset (*.csv *.txt);;All files (*.*)" />
+			<parameter name="Samples" type="int" summary="Number of training samples to be processed. A value of 0 (zero) means all." commandline="trainsamples" minimum="0" value="0" />
+		</group>
+		<group name="Validation" optional="true">
+			<parameter name="Filename" type="filename" summary="Validation filename" commandline="validationfile" filter="Dataset (*.csv *.txt);;All files (*.*)" />
+			<parameter name="Samples" type="int" summary="Number of validation samples to be used. A value of 0 (zero) means all." commandline="validationsamples" minimum="0" value="0" />
+		</group>
+	</group>
+	<group name="Networks configuration">
+		<parameter name="Algorithm" type="list" commandline="algorithm" value="mbp">
+			<option name="Back-Propagation (BP)" value="bp" />
+			<option name="Multiple Back-Propagation (MBP)" value="mbp" />
+		</parameter>
+		<parameter name="Topology" type="string" summary="Network topology layers (e.g. 10-30-10-1 represents a network with 10 inputs, 30 hidden neurons in the first hidden layer, 10 neurons in the second hidden layer and 1 output). Note that at least one input and one output layer must be specified." regexp="[1-9][0-9]*(\-[1-9][0-9]*)+" commandline="topology" />
+		<parameter name="Fixed topology" type="bool" summary="If true the ATS will not search for better network topologies" commandline="fixed" value="false" />
+	</group>
+	<group name="Training configuration">
+		<parameter name="Networks" type="int" summary="Number of networks to train" commandline="networks" minimum="1" value="1" />
+		<parameter name="Robust learning" type="bool" commandline="robust" value="true" summary="The robust learning technique complements the adaptive step size technique, which is used in this implementation, to enhance the stability and training speed." />
+		<group name="Stop criteria">
+			<parameter name="epochs" type="int" summary="Maximum number of epochs that each network will be trained" commandline="epochs" minimum="0" value="0" />
+			<parameter name="Stop RMS" type="float" summary="Stop training when the RMS (Root Mean Square) error of the network is less than or equal to ..." commandline="rms" minimum="0" maximum="1" value="0.01" step="0.005" decimals="3"  />
+		</group>
+		<parameter name="Initial random seed" type="int" commandline="random" value="0" summary="The initial random seed. If 0 (zero) a new random seed will be obtained." />
+	</group>
+</application>
